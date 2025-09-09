@@ -151,5 +151,40 @@ const showCartDetails = (plants) => {
   loadingSpinner(false);
 };
 
+// delete button
+const deleteButton = (id, price) => {
+  const item = getElement(`cartItem-${id}`);
+  if (item) {
+    item.remove();
+
+    totalBalance -= parseInt(price);
+    getElement("total-balance").innerText = totalBalance;
+  }
+};
+
+// modal start
+const loadModal = (id) => {
+  const url = `https://openapi.programming-hero.com/api/plant/${id}`;
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data.plants);
+      showModalDetails(data.plants);
+    });
+};
+
+const showModalDetails = (details) => {
+  modalContainer.innerHTML = `
+  <div class = "space-y-5">
+      <h1 class="text-xl font-bold">${details.name}</h1>
+      <img class="rounded-lg h-80 w-full" src="${details.image}" alt="" />
+      <p><span class="font-bold">Category</span> : ${details.category}</p>
+      <p><span class="font-bold">Price :</span> $${details.price}</p>
+      <p><span class="font-bold">Description:</span> : ${details.description}</p>
+    </div>
+  `;
+
+  modalDetails.showModal();
+};
 
 loadCategories();
